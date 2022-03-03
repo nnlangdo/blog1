@@ -1,17 +1,77 @@
 {% extends 'base.html' %}
 
+<style>
+
+</style>
 {% block title %}My Blog{% endblock %}
+
 {% block content %}
+<div class="home-blog-post-container">
 
-<h1>Posts</h1>
+<div class="">
+    {% for post in object_list %}
 
-{% for post in object_list %}
-<ul>
-    <li>
-        <a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a>  - {{ post.author.first_name }} {{ post.author.last_name}}<br>
-        {{post.body }}
-    </li>    
-</ul>
-{% endfor %}
+    <div class="card mb-3" style="max-width: 900px;">
+        <div class="row g-0">
+          <div class="col-md-2">
+            <img src="..." class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-10">
+            <div class="card-body">
+              <h5 class="card-title">
+                  <a class="title-home-link" href="{% url 'article_detail' post.pk %}">
+                   {{ post.title }}</a>
+              </h5>
+              <span>by {{ post.author.first_name }} {{ post.author.last_name}}
+                  on {{ post.post_date }}
+              </span>
+              <p class="card-text">{{ post.snippet }}</p>             
+              <p class="card-text"><small class="text-muted">
+                <a class="home-edit-link" href="{% url 'category' post.category|slugify %}"> 
+                    {{ post.category }} &nbsp; 
+                    {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                    <a class="home-edit-link" href="{% url 'update_post' post.pk %}">Edit</a>&nbsp;&nbsp;
+                    <a class="home-edit-link" href="{% url 'delete_post' post.pk %}">Delete</a><br>
+                    {% endif %}
+                    {% endif %}
+                 
+                </a>
+              </small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+            
+    <!-- <div>
+        <a href="{% url 'article_detail' post.pk %}">
+            {{ post.title }}</a>- 
+            <a href="{% url 'category' post.category|slugify %}"> 
+            {{ post.category }} </a>  - by {{ post.author.first_name }} 
+            {{ post.author.last_name}} - {{ post.post_date }} -
+    
+            {% if user.is_authenticated %}
+                {% if user.id == post.author.id %}
+                <a href="{% url 'update_post' post.pk %}">Edit</a>&nbsp;&nbsp;
+                <a href="{% url 'delete_post' post.pk %}">Delete</a><br>
+                {% endif %}
+            {% endif %}
+            {{ post.snippet }}
+            {{ post.body | slice:":200" | safe }}......... -->
+            <!-- <a href="{% url 'article_detail' post.pk %}">Read More</a>         -->
+    
+    <!-- </div> -->
+    {% endfor %}   
+
+</div>
+<div class="">
+    <div class="card">
+        <div class="card-body">
+          This is some text within a card body.
+        </div>
+      </div>
+</div>
+</div>
+
 {% endblock %}
 
